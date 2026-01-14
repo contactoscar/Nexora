@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test de Introducción a la IA para Consultores</title>
+  <link rel="icon" href="https://i.imgur.com/1GcRlFl.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron&display=swap" rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      margin: 0;
+      padding: 2rem;
+      color: #3c2c20;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .corner-icon {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      height: 48px;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .corner-icon:hover {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+
+    h1 {
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    form {
+      background: #fff9f2;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 800px;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+    }
+
+    .question {
+      margin-bottom: 1.5rem;
+    }
+
+    .question h3 {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+      word-break: break-word;
+    }
+
+    input[type="radio"] {
+      margin-right: 0.6rem;
+    }
+
+    button {
+      background-color: white;
+      color: orange;
+      border: 2px solid orange;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin-top: 1rem;
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      background-color: orange;
+      color: white;
+    }
+
+    #result {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    #result.pass {
+      color: green;
+    }
+
+    #result.fail {
+      color: red;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+
+      form {
+        padding: 1.5rem 1rem;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .question h3 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Test: Introducción a la IA para Consultores</h1>
+  <form id="quizForm">
+
+    <div class="question" id="q1">
+      <h3>1. ¿Qué es la inteligencia artificial?</h3>
+      <label><input type="radio" name="q1" value="a" /> Un conjunto de técnicas para que las máquinas realicen tareas inteligentes.</label>
+      <label><input type="radio" name="q1" value="b" /> Un hardware específico para computadoras.</label>
+      <label><input type="radio" name="q1" value="c" /> Una base de datos gigante.</label>
+      <label><input type="radio" name="q1" value="d" /> Un lenguaje de programación.</label>
+    </div>
+
+    <div class="question" id="q2">
+      <h3>2. ¿Cuál es una aplicación común de la IA en consultoría?</h3>
+      <label><input type="radio" name="q2" value="a" /> Crear sitios web estáticos.</label>
+      <label><input type="radio" name="q2" value="b" /> Gestionar el correo electrónico manualmente.</label>
+      <label><input type="radio" name="q2" value="c" /> Escribir código sin ayuda.</label>
+      <label><input type="radio" name="q2" value="d" /> Automatizar tareas repetitivas y análisis de datos.</label>
+    </div>
+
+    <div class="question" id="q3">
+      <h3>3. ¿Qué es el aprendizaje automático (machine learning)?</h3>
+      <label><input type="radio" name="q3" value="a" /> Un sistema operativo para IA.</label>
+      <label><input type="radio" name="q3" value="b" /> Un método para que las máquinas aprendan de datos sin programación explícita.</label>
+      <label><input type="radio" name="q3" value="c" /> Un tipo de base de datos.</label>
+      <label><input type="radio" name="q3" value="d" /> Un lenguaje para hacer animaciones.</label>
+    </div>
+
+    <div class="question" id="q4">
+      <h3>4. ¿Cuál es la diferencia entre IA débil y IA fuerte?</h3>
+      <label><input type="radio" name="q4" value="a" /> La IA débil realiza tareas específicas; la IA fuerte tendría conciencia y razonamiento general.</label>
+      <label><input type="radio" name="q4" value="b" /> La IA débil es más rápida que la IA fuerte.</label>
+      <label><input type="radio" name="q4" value="c" /> La IA fuerte solo existe en robots.</label>
+      <label><input type="radio" name="q4" value="d" /> No hay diferencia, son lo mismo.</label>
+    </div>
+
+    <div class="question" id="q5">
+      <h3>5. ¿Qué es un modelo de lenguaje?</h3>
+      <label><input type="radio" name="q5" value="a" /> Un sistema que puede entender y generar texto en lenguaje natural.</label>
+      <label><input type="radio" name="q5" value="b" /> Un traductor de idiomas humanos.</label>
+      <label><input type="radio" name="q5" value="c" /> Un diccionario digital.</label>
+      <label><input type="radio" name="q5" value="d" /> Una aplicación de correo electrónico.</label>
+    </div>
+
+    <div class="question" id="q6">
+      <h3>6. ¿Qué es el "prompt engineering"?</h3>
+      <label><input type="radio" name="q6" value="a" /> Programar hardware de IA.</label>
+      <label><input type="radio" name="q6" value="b" /> Crear bases de datos para IA.</label>
+      <label><input type="radio" name="q6" value="c" /> Diseñar instrucciones precisas para que un modelo de lenguaje produzca mejores resultados.</label>
+      <label><input type="radio" name="q6" value="d" /> Entrenar redes neuronales.</label>
+    </div>
+
+    <div class="question" id="q7">
+      <h3>7. ¿Qué es "machine learning supervisado"?</h3>
+      <label><input type="radio" name="q7" value="a" /> Entrenar un modelo sin datos etiquetados.</label>
+      <label><input type="radio" name="q7" value="b" /> Usar IA para supervisar humanos.</label>
+      <label><input type="radio" name="q7" value="c" /> Automatizar correos electrónicos.</label>
+      <label><input type="radio" name="q7" value="d" /> Entrenar un modelo con datos etiquetados para predecir resultados.</label>
+    </div>
+
+    <div class="question" id="q8">
+      <h3>8. ¿Cuál es uno de los retos éticos principales de la IA?</h3>
+      <label><input type="radio" name="q8" value="a" /> Que la IA sea demasiado lenta.</label>
+      <label><input type="radio" name="q8" value="b" /> Que la IA no use internet.</label>
+      <label><input type="radio" name="q8" value="c" /> La IA ocupe mucho espacio en disco.</label>
+      <label><input type="radio" name="q8" value="d" /> Sesgos en los datos que afectan decisiones automatizadas.</label>
+    </div>
+
+    <div class="question" id="q9">
+      <h3>9. ¿Qué puede hacer un consultor con herramientas de IA?</h3>
+      <label><input type="radio" name="q9" value="a" /> Trabajar sin datos.</label>
+      <label><input type="radio" name="q9" value="b" /> Mejorar análisis de datos y proponer soluciones basadas en IA.</label>
+      <label><input type="radio" name="q9" value="c" /> Escribir todo el código manualmente.</label>
+      <label><input type="radio" name="q9" value="d" /> Evitar el uso de tecnología.</label>
+    </div>
+
+    <div class="question" id="q10">
+      <h3>10. ¿Qué es un chatbot?</h3>
+      <label><input type="radio" name="q10" value="a" /> Un programa que simula conversación con usuarios.</label>
+      <label><input type="radio" name="q10" value="b" /> Un tipo de base de datos.</label>
+      <label><input type="radio" name="q10" value="c" /> Un hardware específico.</label>
+      <label><input type="radio" name="q10" value="d" /> Un documento de texto.</label>
+    </div>
+
+    <div class="question" id="q11">
+      <h3>11. ¿Qué es el aprendizaje no supervisado?</h3>
+      <label><input type="radio" name="q11" value="a" /> Entrenar modelos con etiquetas.</label>
+      <label><input type="radio" name="q11" value="b" /> Entrenar modelos sin etiquetas para encontrar patrones ocultos.</label>
+      <label><input type="radio" name="q11" value="c" /> Programar a mano reglas fijas.</label>
+      <label><input type="radio" name="q11" value="d" /> Eliminar datos incorrectos.</label>
+    </div>
+
+    <div class="question" id="q12">
+      <h3>12. ¿Qué es un dataset?</h3>
+      <label><input type="radio" name="q12" value="a" /> Un software para IA.</label>
+      <label><input type="radio" name="q12" value="b" /> Un conjunto organizado de datos usados para entrenar modelos.</label>
+      <label><input type="radio" name="q12" value="c" /> Un tipo de hardware.</label>
+      <label><input type="radio" name="q12" value="d" /> Un lenguaje de programación.</label>
+    </div>
+
+    <div class="question" id="q13">
+      <h3>13. ¿Cuál es la función principal de un sistema de recomendación?</h3>
+      <label><input type="radio" name="q13" value="a" /> Crear bases de datos grandes.</label>
+      <label><input type="radio" name="q13" value="b" /> Traducir idiomas automáticamente.</label>
+      <label><input type="radio" name="q13" value="c" /> Gestionar correos electrónicos.</label>
+      <label><input type="radio" name="q13" value="d" /> Sugerir productos o contenidos según preferencias y comportamientos.</label>
+    </div>
+
+    <div class="question" id="q14">
+      <h3>14. ¿Qué significa "IA explicable"?</h3>
+      <label><input type="radio" name="q14" value="a" /> IA que no usa datos.</label>
+      <label><input type="radio" name="q14" value="b" /> IA que puede justificar sus decisiones y resultados de forma comprensible.</label>
+      <label><input type="radio" name="q14" value="c" /> IA que no se puede entender.</label>
+      <label><input type="radio" name="q14" value="d" /> IA sin conexión a internet.</label>
+    </div>
+
+    <div class="question" id="q15">
+      <h3>15. ¿Cuál es la principal limitación actual de los modelos de IA?</h3>
+      <label><input type="radio" name="q15" value="a" /> Que son demasiado lentos para cualquier tarea.</label>
+      <label><input type="radio" name="q15" value="b" /> Que pueden producir resultados erróneos o sesgados si no se usan correctamente.</label>
+      <label><input type="radio" name="q15" value="c" /> Que no pueden procesar texto.</label>
+      <label><input type="radio" name="q15" value="d" /> Que solo funcionan sin datos.</label>
+    </div>
+
+    <button type="submit">Enviar respuestas</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const answers = {
+      q1: 'a',
+      q2: 'd',
+      q3: 'b',
+      q4: 'a',
+      q5: 'a',
+      q6: 'c',
+      q7: 'd',
+      q8: 'd',
+      q9: 'b',
+      q10: 'a',
+      q11: 'b',
+      q12: 'b',
+      q13: 'd',
+      q14: 'b',
+      q15: 'b',
+    };
+
+    const minPass = 12; // Nota mínima para aprobar
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      let total = Object.keys(answers).length;
+      let wrong = 0;
+
+      for (const q in answers) {
+        const selected = document.querySelector(`input[name=${q}]:checked`);
+        if (selected) {
+          if (selected.value === answers[q]) {
+            score++;
+          } else {
+            wrong++;
+          }
+        } else {
+          // Si no seleccionó respuesta, cuenta como fallo
+          wrong++;
+        }
+      }
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `
+        Has respondido correctamente <strong>${score}</strong> de <strong>${total}</strong>.<br/>
+        Has fallado <strong>${wrong}</strong> preguntas.<br/>
+      `;
+
+      if (score >= minPass) {
+        resultDiv.innerHTML += `<p class="pass">¡Has aprobado! 🎉</p>`;
+
+        // Crear botón para ir a insignias.html
+        const btn = document.createElement('button');
+        btn.textContent = 'Generar Insignia 🏅';
+        btn.type = 'button';
+        btn.onclick = () => window.location.href = 'insigniasIntro.html';
+        resultDiv.appendChild(btn);
+      } else {
+        resultDiv.innerHTML += `<p class="fail">No has aprobado. Intenta de nuevo para mejorar.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

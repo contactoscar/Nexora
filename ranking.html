@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mejores IAs por Categoría</title>
+  <link rel="icon" href="https://i.imgur.com/1GcRlFl.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header { margin: 2rem 1rem; text-align: center; }
+    .logo { width: 140px; border-radius: 20px; animation: fadeUp 1s ease forwards; }
+    h1 { margin-top: 1rem; font-size: clamp(1.6rem, 4vw, 2.4rem); text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+
+    .filter-bar {
+      margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.15); border: none; border-radius: 8px; padding: 8px 14px;
+      color: white; cursor: pointer; font-weight: 600; transition: all 0.2s ease;
+    }
+    .filter-btn.active, .filter-btn:hover { background: rgba(255,255,255,0.35); }
+
+    .category {
+      margin: 2rem 0; width: 90%; max-width: 1000px;
+      animation: fadeUp 1s ease forwards; display: none;
+    }
+    .category.active { display: block; }
+    .category h2 {
+      font-size: 1.5rem; text-align: center; margin-bottom: 1rem;
+      border-bottom: 3px solid rgba(255,255,255,0.5); padding-bottom: 0.5rem;
+    }
+
+    /* PODIUM */
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-top: 5rem;
+      position: relative;
+    }
+
+    .podium .ia-card {
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      width: 160px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+      position: relative;
+      padding: 1rem 0.5rem;
+    }
+
+    .podium .ia-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    /* Alturas para podium */
+    .first { height: 160px; background: rgba(255,215,0,0.2); border: 2px solid gold; }
+    .second { height: 120px; background: rgba(192,192,192,0.2); border: 2px solid silver; }
+    .third { height: 100px; background: rgba(205,127,50,0.2); border: 2px solid #cd7f32; }
+
+    /* Logo flotante arriba */
+    .ia-card img {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-height: 60px;
+      max-width: 80%;
+      object-fit: contain;
+      background: white;
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .ia-card span {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .corner-icon {
+      position: fixed; top: 12px; left: 12px; height: 48px; z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .corner-icon:hover { transform: scale(1.1) rotate(-5deg); }
+
+    footer {
+      background-color: #3c2c20; color: white; text-align: center;
+      padding: 1rem; font-size: 14px; width: 100%; box-sizing: border-box;
+    }
+    footer a { color: #fbd38d; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) {
+      .ia-card { width: 120px; }
+      .ia-card img { max-height: 50px; }
+    }
+    /* Responsividad */
+@media (max-width: 900px) {
+  .podium {
+    gap: 0.6rem;
+  }
+  .ia-card {
+    width: 120px;
+    padding: 0.8rem 0.4rem;
+  }
+  .ia-card img {
+    max-height: 50px;
+  }
+  
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .podium {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.5rem; /* más espacio entre columnas */
+  }
+
+  .ia-card {
+    width: 28%;          /* un poco más anchas */
+    max-width: 100px;    /* más grandes que antes */
+    padding: 0.6rem 0.4rem;
+    font-size: 0.75rem;  /* texto más legible */
+    position: relative;  /* necesario para posicionar el logo */
+  }
+
+  .ia-card img {
+    position: absolute;
+    top: -35px;           /* sobresale del podio */
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 40px;     /* logos más grandes */
+  }
+
+  /* Mantengo jerarquía de alturas */
+  .second { height: 90px; }
+  .first  { height: 120px; }
+  .third  { height: 70px; }
+}
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+  <a href="index.html">
+    <img src="https://i.imgur.com/edNciHK.png" alt="Inicio" class="corner-icon" />
+  </a>
+
+  <header>
+    <img src="https://i.imgur.com/hNRDyb0.png" alt="Logo Nexora" class="logo" />
+    <h1>Mejores IAs por Categoría</h1>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-cat="all">Todas</button>
+      <button class="filter-btn" data-cat="Generar texto">Texto</button>
+      <button class="filter-btn" data-cat="Análisis">Análisis</button>
+      <button class="filter-btn" data-cat="Investigación">Investigación</button>
+      <button class="filter-btn" data-cat="Explicación">Explicación</button>
+      <button class="filter-btn" data-cat="Razonamiento">Razonamiento</button>
+      <button class="filter-btn" data-cat="Creatividad">Creatividad</button>
+      <button class="filter-btn" data-cat="Programación">Programación</button>
+      <button class="filter-btn" data-cat="Estudio / Aprendizaje">Estudio</button>
+      <button class="filter-btn" data-cat="Resumir textos">Resumen</button>
+      <button class="filter-btn" data-cat="Generar imágenes">Imágenes</button>
+      <button class="filter-btn" data-cat="Presentaciones">Presentaciones</button>
+    </div>
+  </header>
+
+  <!-- SECCIONES -->
+  <section class="category" data-cat="Generar texto">
+    <h2>✍️ Generar texto</h2>
+    <div class="podium">
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://claude.ai" target="_blank"><div class="ia-card first"><img src="https://i.imgur.com/vvBhexh.png"><span>Claude</span></div></a>
+      <a href="https://gemini.google.com" target="_blank"><div class="ia-card third"><img src="https://1000logos.net/wp-content/uploads/2024/02/Gemini-Logo.png"><span>Gemini</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Análisis">
+    <h2>📊 Análisis</h2>
+    <div class="podium">
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://claude.ai" target="_blank"><div class="ia-card first"><img src="https://i.imgur.com/vvBhexh.png"><span>Claude</span></div></a>
+      <a href="https://www.notion.so/ai" target="_blank"><div class="ia-card third"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"><span>Notion AI</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Investigación">
+    <h2>🔍 Investigación</h2>
+    <div class="podium">
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://www.perplexity.ai" target="_blank"><div class="ia-card first"><img src="https://th.bing.com/th/id/OIP.j_46DDENRisOFr1rg6LiOAHaHa"><span>Perplexity</span></div></a>
+      <a href="https://elicit.org" target="_blank"><div class="ia-card third"><img src="https://blog.elicit.com/content/images/2025/01/Elicit-Logo-01-2.png"><span>Elicit</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Explicación">
+    <h2>💡 Explicación</h2>
+    <div class="podium">
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://socratic.org" target="_blank"><div class="ia-card first"><img src="https://www.bestaitools.com/wp-content/uploads/2023/07/socratic-square.png"><span>Socratic</span></div></a>
+      <a href="https://you.com" target="_blank"><div class="ia-card third"><img src="https://fullstackdeeplearning.com/images/logo-you.com.png"><span>You.com</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Razonamiento">
+    <h2>🧠 Razonamiento</h2>
+    <div class="podium">
+      <a href="https://claude.ai" target="_blank"><div class="ia-card second"><img src="https://i.imgur.com/vvBhexh.png"><span>Claude</span></div></a>
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card first"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://pi.ai" target="_blank"><div class="ia-card third"><img src="https://s6-recruiting.cdn.greenhouse.io/job_board_renderer/job_board_configurations/banners/400/015/400/original/Inflection_Logo_Lines_2colordark_transparent_4x.png"><span>Pi</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Creatividad">
+    <h2>🎨 Creatividad</h2>
+    <div class="podium">
+      <a href="https://www.jasper.ai" target="_blank"><div class="ia-card second"><img src="https://th.bing.com/th/id/R.9e16ab4ee010e63f200df6c5095e9ac3?rik=yuWbY78SQWXQag&pid=ImgRaw&r=0"><span>Jasper</span></div></a>
+      <a href="https://www.notion.so/ai" target="_blank"><div class="ia-card first"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"><span>Notion AI</span></div></a>
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card third"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Programación">
+    <h2>👨‍💻 Programación</h2>
+    <div class="podium">
+      <a href="https://replit.com" target="_blank"><div class="ia-card second"><img src="https://cdn.sanity.io/images/bj34pdbp/migration/7d06c37d899d8ba6419b2a9484dfe44586e70081-794x872.png"><span>Replit AI</span></div></a>
+      <a href="https://github.com/features/copilot" target="_blank"><div class="ia-card first"><img src="https://i.imgur.com/WSLv52E.png"><span>Copilot</span></div></a>
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card third"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Estudio / Aprendizaje">
+    <h2>🎓 Estudio / Aprendizaje</h2>
+    <div class="podium">
+      <a href="https://quizlet.com/features/magic-notes" target="_blank"><div class="ia-card second"><img src="https://quizlet.com/favicon.ico"><span>Quizlet AI</span></div></a>
+      <a href="https://socratic.org" target="_blank"><div class="ia-card first"><img src="https://www.bestaitools.com/wp-content/uploads/2023/07/socratic-square.png"><span>Socratic</span></div></a>
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card third"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Resumir textos">
+    <h2>📝 Resumir textos</h2>
+    <div class="podium">
+      <a href="https://chat.openai.com" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>ChatGPT</span></div></a>
+      <a href="https://quillbot.com" target="_blank"><div class="ia-card first"><img src="https://1000logos.net/wp-content/uploads/2023/11/QuillBot-Logo-2017.png"><span>Quillbot</span></div></a>
+      <a href="https://www.jasper.ai" target="_blank"><div class="ia-card third"><img src="https://th.bing.com/th/id/R.9e16ab4ee010e63f200df6c5095e9ac3?rik=yuWbY78SQWXQag&pid=ImgRaw&r=0"><span>Jasper</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Generar imágenes">
+    <h2>🖼️ Generar imágenes</h2>
+    <div class="podium">
+      <a href="https://openai.com/sora" target="_blank"><div class="ia-card second"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"><span>DALL·E / Sora</span></div></a>
+      <a href="https://www.midjourney.com" target="_blank"><div class="ia-card first"><img src="https://th.bing.com/th/id/OIP.NGyj677qi24rtdapk3-q3QHaHa"><span>Midjourney</span></div></a>
+      <a href="https://stablediffusionweb.com" target="_blank"><div class="ia-card third"><img src="https://th.bing.com/th/id/OIP.UtCV2S4t8gvVbL7gD5wtVgAAAA"><span>Stable Diffusion</span></div></a>
+    </div>
+  </section>
+
+  <section class="category" data-cat="Presentaciones">
+    <h2>📊 Presentaciones</h2>
+    <div class="podium">
+      <a href="https://www.beautiful.ai/" target="_blank"><div class="ia-card second"><img src="https://striking-kindness-e0d93214bb.media.strapiapp.com/Beautiful_ai_86797ca8d6.png"><span>Beautiful.ai</span></div></a>
+      <a href="https://gamma.app/" target="_blank"><div class="ia-card first"><img src="https://i.imgur.com/AB33Jr8.png"><span>Gamma</span></div></a>
+      <a href="https://prezi.com/es/" target="_blank"><div class="ia-card third"><img src="https://i.imgur.com/XIzTfnh.png"><span>Prezi</span></div></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Nexora — Selección de las mejores IAs por categoría | Diseñado por <a href="https://nexora.ai">Nexora</a></p>
+  </footer>
+
+  <script>
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const categories = document.querySelectorAll(".category");
+
+    function filterSelection(category) {
+      categories.forEach(c => {
+        c.style.display = (category === "all" || c.dataset.cat === category) ? "block" : "none";
+      });
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelector(".filter-btn.active").classList.remove("active");
+        btn.classList.add("active");
+        filterSelection(btn.dataset.cat);
+      });
+    });
+
+    filterSelection("all");
+  </script>
+</body>
+</html>
