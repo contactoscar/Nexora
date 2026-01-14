@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reto de Optimización de Prompts con IA</title>
+  <link rel="icon" href="https://i.imgur.com/1GcRlFl.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *,*::before,*::after { box-sizing: border-box; }
+    html,body { margin:0;padding:0; font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#f6d365,#fda085); min-height:100vh; display:flex; flex-direction:column; }
+    .container { flex:1; width:90%; max-width:800px; margin:3rem auto; background:#fff9f2; padding:2rem; border-radius:16px; box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+    h1{text-align:center;color:#b75e09;margin-bottom:1.5rem;}
+    textarea{width:100%;height:130px;margin-bottom:1rem;padding:14px;border-radius:10px;border:1px solid #e6b36a;background-color:#fff7e6;color:#5b3b0a;font-family:'Poppins',sans-serif;}
+    .button-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+    .button-row button{flex:1;padding:14px;font-size:15px;cursor:pointer;border:none;border-radius:10px;font-weight:600;background:linear-gradient(to right,#f97316,#fb923c);color:white;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:background 0.3s;}
+    .button-row button:hover{background:linear-gradient(to right,#fb923c,#f97316);}
+    h2{color:#b75e09;margin-top:2rem;font-weight:600;}
+    #timer{text-align:center;font-size:1.1rem;color:#cc5c00;margin-bottom:1rem;}
+    .prompt-box{background:#fff3e0;padding:12px;border-radius:10px;margin-bottom:1rem;border:1px solid #e6b36a;}
+        .corner-icon {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      height: 48px;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+        .logo {
+      display: block;
+      margin: 4rem auto 2rem;
+      max-width: 160px;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .corner-icon:hover {
+      transform: scale(1.1) rotate(-5deg);
+    }
+        footer {
+      background-color: #3c2c20;
+      color: #fbd38d;
+      text-align: center;
+      padding: 1.3rem;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      letter-spacing: 0.04em;
+    }
+    footer a {
+      color: #fcd787;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+    <img src="https://i.imgur.com/hNRDyb0.png" alt="Logo" class="logo" />
+    <a href="index.html" aria-label="Ir a página principal">
+    <img src="https://i.imgur.com/edNciHK.png" alt="Icono superior izquierdo" class="corner-icon" />
+  </a>
+
+<div class="container">
+  <h1>Reto: Mejora este Prompt en 60 segundos</h1>
+  <div class="prompt-box" id="basicPrompt">Cargando prompt...</div>
+  <div id="timer">⏱️ Tiempo: 60s</div>
+  <textarea id="userPrompt" placeholder="Escribe aquí tu versión mejorada..."></textarea>
+  <div class="button-row">
+    <button id="submitBtn">Generar calificación y correción</button>
+    <button id="nextPromptBtn">Nuevo prompt</button>
+  </div>
+  <h2>Respuesta de IA:</h2>
+  <textarea id="optimizedPrompt" readonly placeholder="Aquí se mostrará la valoración y versión optimizada..."></textarea>
+</div>
+  <footer>
+    © 2025 Nexora. Todas las noticias obtenidas de fuentes confiables | <a href="#">Política de privacidad</a> | <a href="#">Términos y condiciones</a>
+  </footer>
+
+<script>
+  const prompts = [
+    "Escribe un resumen simple de un artículo técnico sobre inteligencia artificial.",
+    "Genera un prompt para crear una imagen futurista de una ciudad inteligente.",
+    "Describe brevemente los beneficios de usar modelos de lenguaje en atención al cliente.",
+    "Crea un prompt para pedir a una IA que genere un poema sobre tecnología.",
+    "Explica cómo funcionan las redes neuronales artificiales.",
+    "Haz un prompt para obtener ideas creativas para un chatbot educativo.",
+    "Solicita un prompt para mejorar la productividad usando IA en el trabajo remoto.",
+    "Pide una explicación clara sobre las diferencias entre IA débil y fuerte.",
+    "Genera un prompt para que la IA escriba un artículo sobre ética en IA.",
+    "Crea un prompt para pedir consejos sobre cómo aprender programación de IA."
+  ];
+
+  const basicPromptEl = document.getElementById('basicPrompt');
+  const userPromptEl = document.getElementById('userPrompt');
+  const optimizedPromptEl = document.getElementById('optimizedPrompt');
+  const submitBtn = document.getElementById('submitBtn');
+  const nextPromptBtn = document.getElementById('nextPromptBtn');
+  const timerEl = document.getElementById('timer');
+
+  let currentIndex = 0;
+  let timeLeft = 30;
+  let timerInterval;
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 60;
+    timerEl.textContent = `⏱️ Tiempo: ${timeLeft}s`;
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = `⏱️ Tiempo: ${timeLeft}s`;
+      if(timeLeft <= 0){
+        clearInterval(timerInterval);
+        sendToIA();
+      }
+    },1000);
+  }
+
+  function loadNewPrompt(){
+    clearInterval(timerInterval);
+    optimizedPromptEl.value='';
+    userPromptEl.value='';
+    currentIndex = Math.floor(Math.random()*prompts.length);
+    basicPromptEl.textContent = prompts[currentIndex];
+    startTimer();
+  }
+
+  async function sendToIA(){
+    const userText = userPromptEl.value.trim();
+    const promptText = basicPromptEl.textContent;
+    if(!userText){
+      optimizedPromptEl.value="Debes escribir tu versión antes de enviar.";
+      return;
+    }
+
+    optimizedPromptEl.value="Consultando IA...";
+
+    try{
+      const BACKEND_URL = "https://tu-proyecto.vercel.app/api/chat";
+      const systemPrompt = `
+        Eres un experto en mejorar y evaluar prompts.
+        Prompt base: "${promptText}"
+        Versión del usuario: "${userText}"
+        Valora la versión (0-10) y explica brevemente por qué.
+        Luego genera una versión optimizada y más clara del prompt.
+        Devuelve solo la valoración, explicación y prompt optimizado en texto plano.
+      `;
+
+      const response = await fetch('' + BACKEND_URL + '',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization':'Bearer '+apiKey
+        },
+        body:JSON.stringify({
+          model:'gpt-4o-mini',
+          messages:[
+            {role:'system', content: systemPrompt},
+            {role:'user', content:userText}
+          ],
+          temperature:0.7,
+          max_tokens:250
+        })
+      });
+
+      const data = await response.json();
+      optimizedPromptEl.value = data.choices[0].message.content.trim();
+
+    }catch(err){
+      console.error(err);
+      optimizedPromptEl.value="Error al conectar con IA";
+    }
+  }
+
+  submitBtn.addEventListener('click', sendToIA);
+  nextPromptBtn.addEventListener('click', loadNewPrompt);
+
+  loadNewPrompt();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Página Principal</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://i.imgur.com/1GcRlFl.png" />
+
+  <!-- Fuentes modernas -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Evitar desbordamiento horizontal y asegurar box-sizing correcto */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    #chatbot-button:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 50%;
+      right: 110%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-size: 14px;
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      min-height: 100vh;
+      display: flex;
+      color: white;
+      flex-direction: row;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: rgba(0, 0, 0, 0.15);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 8px 12px; /* menos alto */
+      font-size: 14px; /* más pequeño */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(to right, #ff914d, #ff5500);
+      color: white;
+      transition: background 0.3s ease;
+      position: relative;
+      font-family: 'Poppins', sans-serif;
+       z-index: 10000000;
+    }
+
+
+    .sidebar button:hover {
+      background: linear-gradient(to right, #ff5500, #ff914d);
+       z-index: 10000000;
+    }
+
+    .sidebar button:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 50%;
+      left: 110%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-size: 14px;
+      z-index: 10000000;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      max-width: 100%;
+    }
+
+    .corner-icon {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      height: 48px;
+      z-index: 100;
+    }
+
+    .logo {
+      width: 60%;
+      max-width: 420px;
+      height: auto;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .by-text {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    
+    
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .bubbles li {
+      position: absolute;
+      display: block;
+      list-style: none;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      bottom: -120px;
+      animation: bubbleUp 20s infinite;
+      border-radius: 50%;
+    }
+
+    .bubbles li:nth-child(1) {
+      left: 25%;
+      width: 40px;
+      height: 40px;
+      animation-delay: 0s;
+    }
+
+    .bubbles li:nth-child(2) {
+      left: 10%;
+      animation-delay: 2s;
+      animation-duration: 12s;
+    }
+
+    .bubbles li:nth-child(3) {
+      left: 70%;
+      width: 30px;
+      height: 30px;
+      animation-delay: 4s;
+    }
+
+    .bubbles li:nth-child(4) {
+      left: 40%;
+      width: 60px;
+      height: 60px;
+      animation-delay: 0s;
+      animation-duration: 18s;
+    }
+
+    .bubbles li:nth-child(5) {
+      left: 65%;
+      animation-delay: 0s;
+    }
+
+    .bubbles li:nth-child(6) {
+      left: 75%;
+      width: 15px;
+      height: 15px;
+      animation-delay: 3s;
+    }
+
+    .bubbles li:nth-child(7) {
+      left: 35%;
+      width: 45px;
+      height: 45px;
+      animation-delay: 7s;
+    }
+
+    .bubbles li:nth-child(8) {
+      left: 50%;
+      width: 25px;
+      height: 25px;
+      animation-delay: 15s;
+      animation-duration: 45s;
+    }
+
+    .bubbles li:nth-child(9) {
+      left: 20%;
+      width: 35px;
+      height: 35px;
+      animation-delay: 2s;
+      animation-duration: 35s;
+    }
+
+    .bubbles li:nth-child(10) {
+      left: 85%;
+      width: 25px;
+      height: 25px;
+      animation-delay: 0s;
+      animation-duration: 11s;
+    }
+
+    @keyframes bubbleUp {
+      0% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0.4; /* más visible al inicio */
+      }
+      50% {
+        opacity: 0.7; /* punto más visible en el centro del recorrido */
+      }
+      100% {
+        transform: translateY(-1200px) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    footer {
+      background-color: #3c2c20;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 14px;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+
+    footer a {
+      color: #fbd38d;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+    /* Animaciones clave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Sidebar botones animación inicial */
+.sidebar button {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: fadeIn 0.5s forwards;
+}
+.sidebar button:nth-child(1) { animation-delay: 0.1s; }
+.sidebar button:nth-child(2) { animation-delay: 0.2s; }
+.sidebar button:nth-child(3) { animation-delay: 0.3s; }
+.sidebar button:nth-child(4) { animation-delay: 0.4s; }
+.sidebar button:nth-child(5) { animation-delay: 0.5s; }
+.sidebar button:nth-child(6) { animation-delay: 0.6s; }
+.sidebar button:nth-child(7) { animation-delay: 0.7s; }
+.sidebar button:nth-child(8) { animation-delay: 0.8s; }
+.sidebar button:nth-child(9) { animation-delay: 0.9s; }
+
+/* Texto principal fade */
+.by-text,
+.main-content p {
+  opacity: 0;
+  animation: fadeIn 1.2s ease-in-out forwards;
+  animation-delay: 1s;
+}
+
+/* Animación del chat al abrir */
+#chatbox {
+  animation: slideUp 0.4s ease forwards;
+}
+
+/* Animación de entrada del botón flotante */
+#chatbot-button {
+  animation: bounceIn 0.8s ease-out;
+}
+
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 70px;
+      }
+
+      .sidebar button {
+        width: auto;
+        flex: 1 1 40%;
+      }
+
+      .main-content {
+        padding-bottom: 8rem;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+      }
+    }
+
+    /* Chatbot estilo */
+    #chatbot-button {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      background-color: #ff5500;
+      color: white;
+      font-size: 28px;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 9999;
+      transition: background 0.3s ease;
+    }
+
+    #chatbot-button:hover {
+      background-color: #ff914d;
+    }
+
+    #chatbox {
+      position: fixed;
+      bottom: 150px;
+      right: 24px;
+      width: 320px;
+      max-height: 450px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #chatbox header {
+      background: #ff5500;
+      color: white;
+      padding: 12px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chatbox header .clear-history-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.3s ease;
+    }
+
+    #chatbox header .clear-history-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    #chatbox .messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      font-size: 14px;
+      color: black;
+      background: #fff8f2;
+    }
+
+    #chatbox .input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chatbox input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #chatbox button.send {
+      background: #ff5500;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #chatbox button.send:hover {
+      background: #ff914d;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://i.imgur.com/edNciHK.png" alt="Icono superior izquierdo" class="corner-icon" />
+
+  <div class="sidebar">
+    <button data-tooltip="Noticias recientes del mundo de la Inteligencia Artificial" onclick="location.href='noticias.html'">Ponte al día con la IA</button>
+    <button data-tooltip="Optimiza y mejora tus prompts de texto o audio" onclick="location.href='optimizar.html'">Optimiza tu Prompt</button>
+    <button data-tooltip="Recomendación de las mejores IAs para cada tarea" onclick="location.href='ranking.html'">Conoce las mejores IAs</button>
+    <button data-tooltip="Conoce los mejores flujos de trabajo con las últimas herramientas de IA" onclick="location.href='flujos.html'">Aplica la IA</button>
+    <button data-tooltip="Practica mejorando prompts contrarreloj" onclick="location.href='practicar.html'">Ponte a prueba</button>
+    <button style="background: white; color: #ff6600; font-weight: 600;" data-tooltip="Accede a recursos de aprendizaje" onclick="location.href='aprendizaje.html'">Fórmate</button>
+    <button style="background: white; color: #ff6600; font-weight: 600;" data-tooltip="Conoce todos los servicios que ofrece Qaracter" onclick="location.href='https://www.qaracter.com/es/servicios'">
+  Servicios Qaracter
+</button>
+
+  </div>
+
+  <div class="main-content">
+    <img src="https://i.imgur.com/hNRDyb0.png" alt="Logo" class="logo" />
+    <div class="by-text">
+      by <img src="https://i.imgur.com/1R5T8np.png" alt="Qaracter Logo" style="height: 32px; vertical-align: middle; margin-left: 8px;" />
+    </div>
+    <p style="max-width: 600px; margin: 1rem auto; color: white; font-size: 1.1rem; line-height: 1.4;">
+      Ecosistema integral para optimizar tus habilidades con IA: mejora prompts con ayuda de la IA, descubre herramientas recomendadas, practica contrarreloj y accede a noticias actualizadas. Además, su programa de formación incluye un sistema de insignias que premia tu progreso y aprendizaje.
+    </p>
+  </div>
+    <ul class="bubbles">
+    <li></li><li></li><li></li><li></li><li></li>
+    <li></li><li></li><li></li><li></li><li></li>
+  </ul>
+
+  <!-- Botón flotante de Chatbot -->
+  <div id="chatbot-button" onclick="toggleChatbox()" data-tooltip="Tutor Inteligente - Soporte 24/7">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/chat.png" alt="Icono Chat" style="width: 60%; height: 60%;" />
+  </div>
+
+
+  <!-- Caja de chat -->
+  <div id="chatbox">
+    <header>
+      <span>Tutor IA - Soporte 24/7</span>
+      <button class="clear-history-btn" onclick="clearChatHistory()" title="Borrar historial">🗑️</button>
+    </header>
+    <div class="messages" id="chat-messages">
+      <!-- Los mensajes se cargarán desde localStorage -->
+    </div>
+    <div class="input-area">
+      <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." />
+      <button class="send" onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Nexora. Todos los derechos reservados. | <a href="#">Política de privacidad</a> | <a href="#">Términos y condiciones</a>
+  </footer>
+
+  <script>
+  // URL de tu backend en Vercel (cambiar después de desplegar)
+  const BACKEND_URL = 'https://tu-proyecto.vercel.app/api/chat';
+
+  const STORAGE_KEY = 'nexora_chat_history';
+  const MAX_MESSAGES = 15; // Límite de mensajes guardados (usuario + IA)
+
+  // Sistema de memoria con localStorage
+  const ChatMemory = {
+    // Obtener historial completo
+    getHistory() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+      } catch (error) {
+        console.error('Error al leer historial:', error);
+        return [];
+      }
+    },
+
+    // Guardar historial completo con límite
+    saveHistory(history) {
+      try {
+        // Si supera el límite, mantener solo los últimos MAX_MESSAGES
+        if (history.length > MAX_MESSAGES) {
+          history = history.slice(-MAX_MESSAGES);
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      } catch (error) {
+        console.error('Error al guardar historial:', error);
+      }
+    },
+
+    // Agregar mensaje al historial
+    addMessage(role, content) {
+      let history = this.getHistory();
+      history.push({ role, content });
+      
+      // Aplicar límite de mensajes
+      if (history.length > MAX_MESSAGES) {
+        history = history.slice(-MAX_MESSAGES);
+      }
+      
+      this.saveHistory(history);
+    },
+
+    // Limpiar historial
+    clearHistory() {
+      localStorage.removeItem(STORAGE_KEY);
+    },
+
+    // Obtener historial formateado para OpenAI
+    getFormattedHistory() {
+      const history = this.getHistory();
+      return history.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+    }
+  };
+
+  // Cargar historial al abrir la página
+  function loadChatHistory() {
+    const messages = document.getElementById('chat-messages');
+    messages.innerHTML = '';
+
+    const history = ChatMemory.getHistory();
+
+    if (history.length === 0) {
+      // Si no hay historial, mostrar mensaje de bienvenida
+      const welcomeMsg = document.createElement('div');
+      welcomeMsg.innerHTML = `<strong>IA:</strong> ¡Hola! ¿En qué puedo ayudarte hoy?`;
+      messages.appendChild(welcomeMsg);
+    } else {
+      // Cargar mensajes guardados
+      history.forEach(msg => {
+        const msgElem = document.createElement('div');
+        const label = msg.role === 'user' ? 'Tú' : 'IA';
+        msgElem.innerHTML = `<strong>${label}:</strong> ${msg.content}`;
+        messages.appendChild(msgElem);
+      });
+    }
+
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function toggleChatbox() {
+    const box = document.getElementById('chatbox');
+    if (box.style.display === 'flex') {
+      box.style.display = 'none';
+    } else {
+      box.style.display = 'flex';
+      loadChatHistory();
+    }
+  }
+
+  async function obtenerRespuestaOpenAI(mensajeUsuario) {
+    // Obtener historial formateado
+    const historyMessages = ChatMemory.getFormattedHistory();
+
+    // Construir array de mensajes con system prompt + historial + nuevo mensaje
+    const messages = [
+      {
+        role: 'system',
+        content: `
+Eres un tutor inteligente y amable que ayuda a los usuarios explicando cómo funciona Nexora, una plataforma del grupo Qaracter.
+
+Nexora cuenta con:
+- Un optimizador de prompts con IA, cuenta con un selector de IA para optimizar aún más el prompt para la IA indicada.
+- Una lista de las mejores IAs para cada tarea.
+- Una lista de flujos de trabajo recomendados con las últimas herramientas de IA para resolver tareas o problemas en particular.
+- Un apartado para practicar contrarreloj: te pone un enunciado, tienes 30 segundos para escribir un prompt, y al finalizar te muestra la respuesta.
+- Una sección de noticias sobre inteligencia artificial que se actualizan automáticamente cada 5 minutos.
+- Una sección de cursos y programas de formación con tests tipo test; si apruebas 12/15 preguntas, generas una insignia/diploma con tu nombre y el nombre del curso. Los cursos son:
+   1. Introducción a la IA para consultores
+   2. Prompt Engineering Essentials
+   3. Integración de la IA en Proyectos de Consultoría
+   4. Ética, Sesgos y Gobernanza en el Uso de IA.
+- Una pestaña que redirige a la página de servicios de Qaracter.
+
+Da respuestas breves, responde siempre con claridad, amabilidad y ejemplos prácticos. Ayuda a los usuarios con dudas sobre Nexora, inteligencia artificial, prompts y automatización.
+Si te preguntan cosas sobre Qaracter di que tienen ahí el botón que les lleva directamente a su página oficial.
+Si te hablan en otro idioma sigue la conversación entera en ese idioma.
+
+IMPORTANTE: Tienes memoria de conversaciones anteriores. Recuerda lo que el usuario te ha dicho antes y mantén contexto.
+          `.trim()
+      },
+      ...historyMessages,
+      { role: 'user', content: mensajeUsuario }
+    ];
+
+    try {
+      // Llamar al backend en lugar de OpenAI directamente
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messages })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        return data.message;
+      } else {
+        throw new Error(data.error || 'Error desconocido');
+      }
+
+    } catch (error) {
+      console.error('Error en la llamada al backend:', error);
+      return 'Lo siento, no pude obtener una respuesta en este momento. Intenta de nuevo más tarde.';
+    }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    const userMessage = input.value.trim();
+
+    if (userMessage === '') return;
+
+    // Guardar mensaje del usuario en localStorage
+    ChatMemory.addMessage('user', userMessage);
+
+    // Mostrar mensaje del usuario
+    const userMsgElem = document.createElement('div');
+    userMsgElem.innerHTML = `<strong>Tú:</strong> ${userMessage}`;
+    messages.appendChild(userMsgElem);
+    messages.scrollTop = messages.scrollHeight;
+
+    input.value = '';
+    input.disabled = true;
+
+    // Mostrar mensaje "escribiendo..."
+    const botTypingElem = document.createElement('div');
+    botTypingElem.innerHTML = `<strong>IA:</strong> ...`;
+    messages.appendChild(botTypingElem);
+    messages.scrollTop = messages.scrollHeight;
+
+    // Obtener respuesta de OpenAI
+    const respuesta = await obtenerRespuestaOpenAI(userMessage);
+
+    // Guardar respuesta de la IA en localStorage
+    ChatMemory.addMessage('assistant', respuesta);
+
+    // Reemplazar el mensaje "escribiendo..." con la respuesta real
+    botTypingElem.innerHTML = `<strong>IA:</strong> ${respuesta}`;
+    messages.scrollTop = messages.scrollHeight;
+
+    input.disabled = false;
+    input.focus();
+  }
+
+  // Función para borrar historial
+  function clearChatHistory() {
+    if (confirm('¿Estás seguro de que quieres borrar todo el historial de conversación?')) {
+      ChatMemory.clearHistory();
+      loadChatHistory();
+    }
+  }
+
+  // Event listener para Enter
+  document.getElementById('chat-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Cargar historial cuando se carga la página
+  window.addEventListener('load', function() {
+    // Pre-cargar historial si el usuario abre el chat
+    if (document.getElementById('chatbox').style.display === 'flex') {
+      loadChatHistory();
+    }
+  });
+</script>
+
+
+</body>
+</html>

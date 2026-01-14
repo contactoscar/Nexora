@@ -1,0 +1,12 @@
+{
+  "name": "nexora-backend",
+  "version": "1.0.0",
+  "description": "Backend seguro para el chatbot de Nexora",
+  "main": "api/chat.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "keywords": ["nexora", "chatbot", "openai"],
+  "author": "",
+  "license": "MIT"
+}
