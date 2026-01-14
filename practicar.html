@@ -19,7 +19,7 @@
     h2{color:#b75e09;margin-top:2rem;font-weight:600;}
     #timer{text-align:center;font-size:1.1rem;color:#cc5c00;margin-bottom:1rem;}
     .prompt-box{background:#fff3e0;padding:12px;border-radius:10px;margin-bottom:1rem;border:1px solid #e6b36a;}
-        .corner-icon {
+    .corner-icon {
       position: fixed;
       top: 12px;
       left: 12px;
@@ -27,17 +27,16 @@
       z-index: 100;
       transition: transform 0.3s ease;
     }
-        .logo {
+    .logo {
       display: block;
       margin: 4rem auto 2rem;
       max-width: 160px;
       animation: fadeUp 1s ease forwards;
     }
-
     .corner-icon:hover {
       transform: scale(1.1) rotate(-5deg);
     }
-        footer {
+    footer {
       background-color: #3c2c20;
       color: #fbd38d;
       text-align: center;
@@ -60,8 +59,8 @@
   </style>
 </head>
 <body>
-    <img src="https://i.imgur.com/hNRDyb0.png" alt="Logo" class="logo" />
-    <a href="index.html" aria-label="Ir a página principal">
+  <img src="https://i.imgur.com/hNRDyb0.png" alt="Logo" class="logo" />
+  <a href="index.html" aria-label="Ir a página principal">
     <img src="https://i.imgur.com/edNciHK.png" alt="Icono superior izquierdo" class="corner-icon" />
   </a>
 
@@ -71,17 +70,20 @@
   <div id="timer">⏱️ Tiempo: 60s</div>
   <textarea id="userPrompt" placeholder="Escribe aquí tu versión mejorada..."></textarea>
   <div class="button-row">
-    <button id="submitBtn">Generar calificación y correción</button>
+    <button id="submitBtn">Generar calificación y corrección</button>
     <button id="nextPromptBtn">Nuevo prompt</button>
   </div>
   <h2>Respuesta de IA:</h2>
   <textarea id="optimizedPrompt" readonly placeholder="Aquí se mostrará la valoración y versión optimizada..."></textarea>
 </div>
+
   <footer>
     © 2025 Nexora. Todas las noticias obtenidas de fuentes confiables | <a href="#">Política de privacidad</a> | <a href="#">Términos y condiciones</a>
   </footer>
 
 <script>
+  const BACKEND_URL = "https://nexora-flame.vercel.app/api/chat";
+
   const prompts = [
     "Escribe un resumen simple de un artículo técnico sobre inteligencia artificial.",
     "Genera un prompt para crear una imagen futurista de una ciudad inteligente.",
@@ -103,7 +105,7 @@
   const timerEl = document.getElementById('timer');
 
   let currentIndex = 0;
-  let timeLeft = 30;
+  let timeLeft = 60;
   let timerInterval;
 
   function startTimer() {
@@ -140,7 +142,6 @@
     optimizedPromptEl.value="Consultando IA...";
 
     try{
-      const BACKEND_URL = "https://nexora-flame.vercel.app/api/chat";
       const systemPrompt = `
         Eres un experto en mejorar y evaluar prompts.
         Prompt base: "${promptText}"
@@ -150,29 +151,34 @@
         Devuelve solo la valoración, explicación y prompt optimizado en texto plano.
       `;
 
-      const response = await fetch('' + BACKEND_URL + '',{
+      const response = await fetch(BACKEND_URL, {
         method:'POST',
         headers:{
-          'Content-Type':'application/json',
-          'Authorization':'Bearer '+apiKey
+          'Content-Type':'application/json'
         },
         body:JSON.stringify({
-          model:'gpt-4o-mini',
           messages:[
             {role:'system', content: systemPrompt},
             {role:'user', content:userText}
-          ],
-          temperature:0.7,
-          max_tokens:250
+          ]
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`Error HTTP ${response.status}`);
+      }
+
       const data = await response.json();
-      optimizedPromptEl.value = data.choices[0].message.content.trim();
+      
+      if (data.success && data.message) {
+        optimizedPromptEl.value = data.message;
+      } else {
+        throw new Error('Formato de respuesta inesperado');
+      }
 
     }catch(err){
       console.error(err);
-      optimizedPromptEl.value="Error al conectar con IA";
+      optimizedPromptEl.value="Error al conectar con IA: " + err.message;
     }
   }
 
