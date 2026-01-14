@@ -1,22 +1,16 @@
-// api/chat.js - Función serverless con CORS habilitado
-
 export default async function handler(req, res) {
-  // Configurar CORS para todas las respuestas
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  // CORS - configurar primero
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // Manejar petición OPTIONS (preflight)
+  // Manejar OPTIONS
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
-  // Solo permitir POST
+  // Solo POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
@@ -25,10 +19,9 @@ export default async function handler(req, res) {
     const { messages } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: 'Formato de mensajes inválido' });
+      return res.status(400).json({ error: 'Formato inválido' });
     }
 
-    // Llamar a OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -43,7 +36,7 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+      throw new Error(`OpenAI error: ${response.status}`);
     }
 
     const data = await response.json();
@@ -54,9 +47,9 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Error en chat:', error);
+    console.error('Error:', error);
     return res.status(500).json({ 
-      error: 'Error al procesar la solicitud',
+      error: 'Error al procesar',
       details: error.message 
     });
   }
