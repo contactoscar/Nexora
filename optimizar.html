@@ -16,7 +16,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* (Tu estilo original, omitido aquí para brevedad) */
     *, *::before, *::after {
       box-sizing: border-box;
     }
@@ -130,22 +129,22 @@
       position: absolute;
       top: 8px;
       right: 8px;
-      background-color: rgba(255, 145, 77, 0.3); /* naranja claro semi-transparente */
-      border: 1.5px solid #ff914d; /* borde visible */
-      color: #ff5500; /* color texto naranja oscuro */
+      background-color: rgba(255, 145, 77, 0.3);
+      border: 1.5px solid #ff914d;
+      color: #ff5500;
       padding: 6px 12px;
       font-size: 13px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: none; /* sin sombra para evitar destacar demasiado */
+      box-shadow: none;
       pointer-events: auto;
-      backdrop-filter: blur(5px); /* efecto vidrio, opcional */
+      backdrop-filter: blur(5px);
       transition: background-color 0.3s ease;
     }
 
     #copyPromptBtn:hover {
-      background-color: rgba(255, 145, 77, 0.6); /* menos transparente al pasar el ratón */
+      background-color: rgba(255, 145, 77, 0.6);
     }
 
     textarea {
@@ -270,7 +269,6 @@
         <option value="Bard">Bard (Asistente conversacional de Google con respuestas amplias)</option>
         <option value="Claude">Claude (Asistente IA para conversaciones y generación de texto segura)</option>
         <option value="Bing Chat">Bing Chat (Chatbot con acceso a búsqueda web en tiempo real)</option>
-
       </select>
     </div>
 
@@ -282,12 +280,11 @@
       Optimizar Prompt
     </button>
 
-    <!-- Prompt optimizado + botón copiar -->
-<h2>Prompt optimizado:</h2>
-<div style="position: relative;">
-  <textarea id="optimizedPrompt" placeholder="Aquí se mostrará el prompt mejorado..." readonly></textarea>
-  <button id="copyPromptBtn" title="Copiar prompt">Copiar</button>
-</div>
+    <h2>Prompt optimizado:</h2>
+    <div style="position: relative;">
+      <textarea id="optimizedPrompt" placeholder="Aquí se mostrará el prompt mejorado..." readonly></textarea>
+      <button id="copyPromptBtn" title="Copiar prompt">Copiar</button>
+    </div>
 
   </div>
 </div>
@@ -319,33 +316,33 @@
       : 'Eres un experto en mejorar y optimizar prompts para IA. Devuelve solo el prompt mejorado, no digas por favor ni nada por el estilo, ni pongas fechas.';
 
     try {
-      const response = await fetch('' + BACKEND_URL + '', {
+      const response = await fetch(BACKEND_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
           messages: [
             { role: 'system', content: systemMessage },
             { role: 'user', content: promptInput }
-          ],
-          temperature: 0.7,
-          max_tokens: 150
+          ]
         }),
       });
 
       if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error.message || 'Error desconocido');
+        throw new Error(`Error HTTP ${response.status}`);
       }
 
       const data = await response.json();
-      const improvedPrompt = data.choices[0].message.content.trim();
-      optimizedPrompt.value = improvedPrompt;
+      
+      if (data.success && data.message) {
+        optimizedPrompt.value = data.message;
+      } else {
+        throw new Error('Formato de respuesta inesperado');
+      }
 
     } catch (error) {
+      console.error('Error completo:', error);
       optimizedPrompt.value = '';
       alert('Error al optimizar: ' + error.message);
     }
