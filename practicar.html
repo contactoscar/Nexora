@@ -104,6 +104,25 @@
   const nextPromptBtn = document.getElementById('nextPromptBtn');
   const timerEl = document.getElementById('timer');
 
+  // ✅ RATE LIMITER AÑADIDO
+  const RateLimiter = {
+    maxRequests: 10,
+    timeWindow: 60000,
+    requests: [],
+    canMakeRequest() {
+      const now = Date.now();
+      this.requests = this.requests.filter(time => now - time < this.timeWindow);
+      if (this.requests.length >= this.maxRequests) {
+        const oldestRequest = this.requests[0];
+        const waitTime = Math.ceil((this.timeWindow - (now - oldestRequest)) / 1000);
+        alert(`⏱️ Demasiadas peticiones. Espera ${waitTime} segundos.`);
+        return false;
+      }
+      this.requests.push(now);
+      return true;
+    }
+  };
+
   let currentIndex = 0;
   let timeLeft = 60;
   let timerInterval;
@@ -138,6 +157,9 @@
       optimizedPromptEl.value="Debes escribir tu versión antes de enviar.";
       return;
     }
+
+    // ✅ VERIFICACIÓN DE RATE LIMIT AÑADIDA
+    if (!RateLimiter.canMakeRequest()) return;
 
     optimizedPromptEl.value="Consultando IA...";
 
@@ -190,3 +212,4 @@
 
 </body>
 </html>
+
