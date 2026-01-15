@@ -620,11 +620,30 @@
     © 2025 Nexora. Todos los derechos reservados. | <a href="#">Política de privacidad</a> | <a href="#">Términos y condiciones</a>
   </footer>
 
-  <script>
+<script>
   const BACKEND_URL = 'https://nexora-flame.vercel.app/api/chat';
 
   const STORAGE_KEY = 'nexora_chat_history';
   const MAX_MESSAGES = 15;
+
+  // ✅ RATE LIMITER AÑADIDO
+  const RateLimiter = {
+    maxRequests: 10,
+    timeWindow: 60000,
+    requests: [],
+    canMakeRequest() {
+      const now = Date.now();
+      this.requests = this.requests.filter(time => now - time < this.timeWindow);
+      if (this.requests.length >= this.maxRequests) {
+        const oldestRequest = this.requests[0];
+        const waitTime = Math.ceil((this.timeWindow - (now - oldestRequest)) / 1000);
+        alert(`⏱️ Demasiadas peticiones. Espera ${waitTime} segundos.`);
+        return false;
+      }
+      this.requests.push(now);
+      return true;
+    }
+  };
 
   const ChatMemory = {
     getHistory() {
@@ -770,6 +789,9 @@ IMPORTANTE: Tienes memoria de conversaciones anteriores. Recuerda lo que el usua
     const userMessage = input.value.trim();
 
     if (userMessage === '') return;
+
+    // ✅ VERIFICACIÓN DE RATE LIMIT AÑADIDA
+    if (!RateLimiter.canMakeRequest()) return;
 
     ChatMemory.addMessage('user', userMessage);
 
