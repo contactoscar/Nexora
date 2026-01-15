@@ -300,12 +300,34 @@
   const optimizedPrompt = document.getElementById('optimizedPrompt');
   const iaSelector = document.getElementById('iaSelector');
 
+  // ✅ RATE LIMITER AÑADIDO
+  const RateLimiter = {
+    maxRequests: 10,
+    timeWindow: 60000,
+    requests: [],
+    canMakeRequest() {
+      const now = Date.now();
+      this.requests = this.requests.filter(time => now - time < this.timeWindow);
+      if (this.requests.length >= this.maxRequests) {
+        const oldestRequest = this.requests[0];
+        const waitTime = Math.ceil((this.timeWindow - (now - oldestRequest)) / 1000);
+        alert(`⏱️ Demasiadas peticiones. Espera ${waitTime} segundos.`);
+        return false;
+      }
+      this.requests.push(now);
+      return true;
+    }
+  };
+
   async function optimizePrompt() {
     const promptInput = inputText.value.trim();
     if (!promptInput) {
       alert('Por favor escribe un prompt.');
       return;
     }
+
+    // ✅ VERIFICACIÓN DE RATE LIMIT AÑADIDA
+    if (!RateLimiter.canMakeRequest()) return;
 
     const selectedIA = iaSelector.value.trim();
 
@@ -431,7 +453,6 @@
       btn.textContent = '¡Copiado!';
       btn.style.background = '#22c55e';
 
-      // Abrir la página de la IA seleccionada
       const selectedIA = iaSelector.value.trim().toLowerCase();
       const iaUrls = {
         'chatgpt': 'https://chat.openai.com/',
@@ -464,3 +485,4 @@
 
 </body>
 </html>
+
